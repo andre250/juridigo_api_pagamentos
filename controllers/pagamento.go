@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"gopkg.in/mgo.v2/bson"
@@ -38,8 +37,19 @@ func createPayment(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&pagamento)
 
-	pagamento.Status = false
-	err := helpers.Db().Insert("pagamentos", &pagamento)
+	pagamento.Status = "0"
+
+	err := helpers.Db().Update("propostas", bson.M{"_id": bson.ObjectIdHex(pagamento.PropostaID)}, bson.M{"$set": bson.M{
+		"status": "4",
+	}})
+
+	if err != nil {
+		w.WriteHeader(utils.HTTPStatusCode["INTERNAL_SERVER_ERROR"])
+		w.Write([]byte(`{"msg":"Erro Interno"}`))
+		return
+	}
+
+	err = helpers.Db().Insert("pagamentos", &pagamento)
 	if err != nil {
 		w.WriteHeader(utils.HTTPStatusCode["BAD_REQUEST"])
 		w.Write([]byte(`{"msg":"parametros inválidos na chamada"}`))
@@ -57,8 +67,8 @@ func updatePayment(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&pagamento)
 
-	if pagamento.Status == true {
-		pagamento.DataPagamento = strconv.Itoa(int(time.Now().Unix()))
+	if pagamento.Status == "1" {
+		pagamento.DataPagamento = time.Now().UnixNano() / int64(time.Millisecond)
 	}
 	err := helpers.Db().Update("pagamentos", bson.M{"_id": bson.ObjectIdHex(id)}, bson.M{"$set": pagamento})
 	if err != nil {
