@@ -12,6 +12,6 @@ Routes - Controlador de rotas do microsserviço
 */
 func Routes() {
 	helpers.APIDisperser("",
-		models.DefaultAPI{SubPath: "/", Handler: controllers.PaymentDisperser, Auth: true},
+		models.DefaultAPI{SubPath: "/", Handler: controllers.PaymentDisperser, Auth: false},
 	)
 }

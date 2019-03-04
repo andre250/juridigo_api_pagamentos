@@ -12,7 +12,7 @@ type Pagamento struct {
 	PropostaID    string        `bson:"propostaId,omitempty" json:"propostaId,omitempty"`
 	UsuarioID     string        `bson:"usuarioId,omitempty" json:"usuarioID,omitempty"`
 	Valor         float64       `bson:"valor,omitempty" json:"valor,omitempty"`
-	DataConclusao int64         `bson:"dataConclusao,omitempty" json:"dataConclusao,omitempty"`
-	DataPagamento int64         `bson:"dataPagamento,omitempty" json:"dataPagamento,omitempty"`
+	DataConclusao string        `bson:"dataConclusao,omitempty" json:"dataConclusao,omitempty"`
+	DataPagamento string        `bson:"dataPagamento,omitempty" json:"dataPagamento,omitempty"`
 	Status        string        `bson:"status" json:"status"`
 }
